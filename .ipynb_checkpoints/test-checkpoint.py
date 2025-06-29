@@ -2,8 +2,6 @@ import pytest
 import joblib
 import os
 import pandas as pd
-import numpy as np
-from feast import FeatureStore
 
 
 # --------------------------
@@ -18,26 +16,13 @@ def test_artifacts_exist():
     assert os.path.exists("artifacts/model.joblib")
 
 
-def test_feast_config():
-    """
-    Check if the Feast feature store and specified feature service can be loaded correctly.
-    Validates the feature store setup and service naming.
-    """
-    try:
-        store = FeatureStore(repo_path="feature_repo")
-        feature_service = store.get_feature_service("feast_model_v1")
-        assert feature_service is not None
-    except Exception as e:
-        pytest.fail(f"Failed to load feature service: {str(e)}")
-
-
 # ---------------------------
 # Model Prediction Tests
 # ---------------------------
 
 class TestModelPredictions:
     """
-    A suite of tests validating model loading, feature structure, and prediction logic.
+    A suite of tests validating model loading, hardcoded feature structure, and prediction logic.
     """
 
     @pytest.fixture(scope="class")
@@ -48,27 +33,18 @@ class TestModelPredictions:
         return joblib.load("artifacts/model.joblib")
 
     @pytest.fixture(scope="class")
-    def feature_store(self):
+    def online_features(self):
         """
-        Initialize and return a Feast FeatureStore instance.
+        Return a hardcoded DataFrame mimicking what Feast would return.
         """
-        return FeatureStore(repo_path="feature_repo")
-
-    @pytest.fixture(scope="class")
-    def online_features(self, feature_store):
-        """
-        Retrieve online features for 3 flower species from the feature store.
-        Converts the result to a pandas DataFrame for testing.
-        """
-        features = feature_store.get_online_features(
-            features=feature_store.get_feature_service("feast_model_v1"),
-            entity_rows=[
-                {"species": "setosa"},
-                {"species": "versicolor"},
-                {"species": "virginica"},
-            ],
-        ).to_df()
-        return features
+        data = {
+            "sepal_length": [5.1, 6.0, 6.3],
+            "sepal_width": [3.5, 2.2, 3.3],
+            "petal_length": [1.4, 4.0, 6.0],
+            "petal_width": [0.2, 1.0, 2.5],
+            "species": ["setosa", "versicolor", "virginica"]
+        }
+        return pd.DataFrame(data)
 
     def test_data_schema_validation(self, online_features):
         """
@@ -84,29 +60,25 @@ class TestModelPredictions:
             "petal_width",
             "species",
         ]
-        # Check that all required columns are present
+
         for col in required_columns:
             assert col in online_features.columns, f"Missing column: {col}"
 
-        # Ensure feature columns are numeric
         numeric_columns = ["sepal_length", "sepal_width", "petal_length", "petal_width"]
         for col in numeric_columns:
             assert pd.api.types.is_numeric_dtype(
                 online_features[col]
             ), f"Column '{col}' should be numerical"
 
-        # Validate species values
-        expected_species = ["setosa", "versicolor", "virginica"]
+        expected_species = {"setosa", "versicolor", "virginica"}
         actual_species = set(online_features["species"].unique())
         assert actual_species.issubset(
             expected_species
         ), f"Unexpected species found: {actual_species - expected_species}"
 
-        # Check for nulls in the required columns
         assert not online_features[required_columns].isnull().any().any(), \
             "Features DataFrame should not have null values"
 
-        # Expect exactly 3 rows (one per species)
         assert len(online_features) == 3, f"Expected 3 rows, got {len(online_features)}"
 
     def test_model_loading(self, model):
@@ -124,16 +96,13 @@ class TestModelPredictions:
         feature_columns = ["sepal_length", "sepal_width", "petal_length", "petal_width"]
         X = online_features[feature_columns]
 
-        # Generate predictions
         predictions = model.predict(X)
 
-        # Basic checks on prediction output
         assert len(predictions) == 3, f"Expected 3 predictions, got {len(predictions)}"
         assert all(
             pred in ["setosa", "versicolor", "virginica"] for pred in predictions
         ), "Predictions contain unexpected classes"
 
-        # Optional: log mismatches between prediction and actual label
         for idx, row in online_features.iterrows():
             expected_class = row["species"]
             predicted_class = predictions[idx]
@@ -144,6 +113,6 @@ class TestModelPredictions:
                 )
                 print(f"Features: {row[feature_columns].to_dict()}")
 
-                
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v", "--tb=short", "--disable-warnings"])

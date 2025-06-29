@@ -1,0 +1,4 @@
+[core]
+    remote = origin
+['remote "origin"']
+    url = gs://mlops-course-charged-muse-461217-u9-week-1-unique/dvc
