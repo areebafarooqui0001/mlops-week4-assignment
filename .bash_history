@@ -96,3 +96,46 @@ cd mlops-week4-assignment
 cd ..
 rm mlops-week4-assignment
 rm -r mlops-week4-assignment
+source .env/bin/activate
+git clone https://github.com/areebafarooqui0001/mlops-week4-assignment.git
+cd mlops-week4-assignment
+git checkout -b main
+git push -u origin main
+git branch
+git branchh
+git branch
+git status
+cd ..
+rm -r mlops-week4-assignment
+cd mlops-week4-assignment
+git remote -v
+git status
+git log
+git config user.name
+git config user.email
+git remote remove origin
+git remote add origin https://github.com/areebafarooqui0001/mlops-week4-assignment.git
+git push -u origin master
+git remote -v
+git branch --all
+git push -u origin main
+git checkout -b main
+git push -u origin main
+git checkout -b dev
+git branch --all
+git branch -d master
+git branch --all
+git checkout main
+git branch --all
+git checkout dev
+git branch --all
+git push -u origin dev
+git branch --all
+git commit
+git checkout main
+git branch --all
+git add .
+git commit -m "Week 4 assignment code"
+git push
+git status
+ls
