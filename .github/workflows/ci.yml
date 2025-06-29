@@ -47,7 +47,7 @@ jobs:
 
     - name: Set up DVC
       run: |
-        dvc pull artifacts
+        dvc pull artifacts/model.joblib
 
     - name: Run tests
       run: |
