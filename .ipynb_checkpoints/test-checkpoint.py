@@ -10,7 +10,7 @@ import pandas as pd
 
 def test_artifacts_exist():
     """
-    Check if the artifacts directory and trained model file exists.
+    Check if the artifacts directory and trained model file exist.
     """
     assert os.path.exists("artifacts")
     assert os.path.exists("artifacts/model.joblib")
