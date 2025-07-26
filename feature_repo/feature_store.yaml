@@ -1,6 +1,8 @@
-project: driver_project
+project: iris_classifier_gcp
 registry: data/registry.db
-provider: local
-online_store:
+provider: gcp
+online_store :
     type: sqlite
     path: data/online_store.db
+offline_store:
+    type: bigquery
