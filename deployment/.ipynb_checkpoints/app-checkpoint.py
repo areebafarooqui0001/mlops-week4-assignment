@@ -1,17 +1,16 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 import joblib
-import numpy as np
 import pandas as pd
 import os
 
 app = FastAPI(title="Iris Classifier API")
 
-# Load model
-model_path = os.path.join(os.path.dirname(__file__), "../artifacts/model.joblib")
+# Load the trained model from the correct path
+model_path = os.path.join("artifacts", "model.joblib")
 model = joblib.load(model_path)
 
-# Input schema
+# Define the input data schema using Pydantic
 class Schema(BaseModel):
     sepal_length: float
     sepal_width: float
@@ -20,12 +19,16 @@ class Schema(BaseModel):
 
 @app.get("/")
 def home():
-    return {"message": "Mlops Assignment: Iris Classifier"}
+    return {"message": "MLOps Assignment: Iris Classifier"}
 
 @app.post("/predict")
 def predict_species(data: Schema):
-    input = pd.DataFrame([data.dict()])
+    # Convert request data to DataFrame
+    input_df = pd.DataFrame([data.dict()])
+    
+    # Make prediction
     prediction = model.predict(input_df)[0]
+    
     return {
         "predicted_class": prediction
     }
