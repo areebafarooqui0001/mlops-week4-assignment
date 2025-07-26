@@ -11,7 +11,7 @@ COPY deployment/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt 
 
 # Copy the model artifacts correctly
-COPY artifacts /app/artifacts
+COPY artifacts ./artifacts
 
 # Copy the application code
 COPY deployment/ .

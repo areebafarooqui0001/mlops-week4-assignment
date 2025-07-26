@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: mlops-assignment-fastapi
-        image: DOCKER_IMAGE_PLACEHOLDER # This will be replaced by our CI/CD pipeline
+        image: us-central1-docker.pkg.dev/charged-muse-461217-u9/mlops-artifacts/mlops-assignment-fastapi:latest
         ports:
         - containerPort: 8000
         resources:
