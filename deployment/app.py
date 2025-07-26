@@ -20,7 +20,7 @@ class Schema(BaseModel):
 def home():
     return {"message": "Mlops Assignment: Iris Classifier"}
 
-@app.post("/predict/")
+@app.post("/predict")
 def predict_species(data: Schema):
     input = pd.DataFrame([data.dict()])
     prediction = model.predict(input_df)[0]

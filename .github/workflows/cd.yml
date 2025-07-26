@@ -10,7 +10,7 @@ env:
   GKE_CLUSTER: mlops-assignment-cluster
   GKE_LOCATION: us-east1
   DEPLOYMENT_NAME: mlops-assignment-app
-  REPOSITORY: mlops-assignment-artifacts
+  REPOSITORY: mlops-artifacts
   IMAGE: mlops-assignment-fastapi
 
 jobs:
@@ -36,10 +36,6 @@ jobs:
 
       - name: 'Setup DVC'
         uses: iterative/setup-dvc@v1
-
-      - name: Pull the artifacts directory with dvc
-        run: |
-          dvc pull artifacts
 
       - name: 'Docker auth'
         run: |-
