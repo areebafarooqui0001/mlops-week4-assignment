@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata: 
   name: mlops-assignment-app
-sрес:
+spec:
   replicas: 2
   selector:
     matchLabels:
@@ -14,7 +14,7 @@ sрес:
     spec: 
       containers:
       - name: mlops-assignment-fastapi
-        image: us-centrall-docker.pkg.dev/charged-muse-461217-u9/mlops-artifacts/iris:latest
+        image: us-central1-docker.pkg.dev/charged-muse-461217-u9/mlops-artifacts/iris:latest
         ports:
         - containerPort: 8000
         resources:
@@ -22,5 +22,5 @@ sрес:
             memory: "256Mi"
             cpu: "100m"
           limits:
-            memогу: "1Gi"
+            memory: "1Gi"
             cpu: "500m"
