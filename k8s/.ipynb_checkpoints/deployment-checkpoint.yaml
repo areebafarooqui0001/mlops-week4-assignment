@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: mlops-assignment-fastapi
-        image: us-central1-docker.pkg.dev/charged-muse-461217-u9/mlops-artifacts/mlops-assignment-fastapi:latest
+        image: us-central1-docker.pkg.dev/charged-muse-461217-u9/mlops-artifacts/mlops-assignment-fastapi:latest #placeholder
         ports:
         - containerPort: 8000
         resources:
