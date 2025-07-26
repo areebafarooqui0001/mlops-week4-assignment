@@ -10,11 +10,11 @@ COPY deployment/requirements.txt .
 # Install Python dependencies 
 RUN pip install --no-cache-dir -r requirements.txt 
 
-# Copy model artifacts
+# Copy the model artifacts correctly
 COPY artifacts /app/artifacts
 
-# Copy application code (FastAPI app.py)
-COPY deployment/app.py .
+# Copy the application code
+COPY deployment/ .
 
 # Expose the port FASTAPI will run on
 EXPOSE 8000
