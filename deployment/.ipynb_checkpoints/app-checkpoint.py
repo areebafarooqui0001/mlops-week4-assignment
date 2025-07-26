@@ -3,11 +3,13 @@ from pydantic import BaseModel
 import joblib
 import numpy as np
 import pandas as pd
+import os
 
 app = FastAPI(title="Iris Classifier API")
 
 # Load model
-model = joblib.load("artifacts/model.joblib")
+model_path = os.path.join(os.path.dirname(__file__), "../artifacts/model.joblib")
+model = joblib.load(model_path)
 
 # Input schema
 class Schema(BaseModel):
