@@ -36,6 +36,9 @@ jobs:
 
       - name: 'Setup DVC'
         uses: iterative/setup-dvc@v1
+      
+      - name: 'DVC pull artifacts'
+        run: dvc pull artifacts/model.joblib 
 
       - name: 'Docker auth'
         run: gcloud auth configure-docker $GAR_LOCATION-docker.pkg.dev --quiet
