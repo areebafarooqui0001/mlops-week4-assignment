@@ -10,14 +10,14 @@ COPY deployment/requirements.txt .
 # Install Python dependencies 
 RUN pip install --no-cache-dir -r requirements.txt 
 
-# Copy the model artifacts
-COPY artifacts ./artifacts
+# Copy model artifacts
+COPY artifacts /app/artifacts
 
-# Copy the application code
-COPY deployment/ .
+# Copy application code (FastAPI app.py)
+COPY deployment/app.py .
 
 # Expose the port FASTAPI will run on
 EXPOSE 8000
 
-#6. Command to run the FASTAPI application
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"] 
+# Command to run the FASTAPI application
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
